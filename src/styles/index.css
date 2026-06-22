@@ -1,0 +1,110 @@
+:root {
+  /* Color tokens — ledger/passbook meets risk dashboard */
+  --ink: #0F1B2D;
+  --ink-soft: #1B2A42;
+  --ink-softer: #283C5C;
+  --paper: #F7F4EC;
+  --paper-dim: #EDE8DC;
+  --paper-line: #DDD6C4;
+  --debit: #E1432A;
+  --debit-soft: #FBE7E2;
+  --debit-deep: #9C2A18;
+  --credit: #1B8A6B;
+  --credit-soft: #E3F2EC;
+  --credit-deep: #115C46;
+  --amber: #C2790A;
+  --amber-soft: #FBEFDC;
+  --slate: #5A6472;
+  --slate-dim: #8B93A0;
+  --white: #FFFFFF;
+
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+
+  --shadow-card: 0 1px 2px rgba(15,27,45,0.04), 0 8px 24px rgba(15,27,45,0.06);
+  --shadow-card-hover: 0 2px 4px rgba(15,27,45,0.06), 0 16px 40px rgba(15,27,45,0.10);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  scroll-behavior: smooth;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+p { margin: 0; }
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+}
+
+::selection {
+  background: var(--debit);
+  color: var(--white);
+}
+
+/* Focus visibility for accessibility */
+:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--slate-dim);
+  font-weight: 500;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+@media (max-width: 640px) {
+  .container { padding: 0 18px; }
+}
+
+code, pre {
+  font-family: var(--font-mono);
+}

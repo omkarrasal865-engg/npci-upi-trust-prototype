@@ -1,0 +1,976 @@
+/* ================================================================
+   Trust Screen — Production-style UX
+   Reference: PhonePe / Google Pay visual language
+   ================================================================ */
+
+#screen {
+  background: var(--paper-dim);
+}
+
+.screen-demo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 48px;
+  align-items: start;
+}
+
+/* ----------------------------------------------------------------
+   Band picker
+   ---------------------------------------------------------------- */
+.band-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: sticky;
+  top: 88px;
+}
+
+.band-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-align: left;
+  padding: 14px 18px;
+  border-radius: 12px;
+  border: 1.5px solid var(--paper-line);
+  background: var(--white);
+  transition: all 0.15s ease;
+  gap: 12px;
+}
+
+.band-btn:hover { border-color: var(--slate-dim); }
+
+.band-btn-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--slate);
+}
+
+.band-btn-key {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--slate-dim);
+  background: var(--paper-dim);
+  padding: 3px 8px;
+  border-radius: 100px;
+}
+
+.band-btn--active .band-btn-label { color: var(--white); }
+.band-btn--active .band-btn-key { background: rgba(255,255,255,0.15); color: rgba(255,255,255,0.7); }
+
+.band-btn--active.band-btn--low { background: var(--credit); border-color: var(--credit); }
+.band-btn--active.band-btn--medium { background: var(--amber); border-color: var(--amber); }
+.band-btn--active.band-btn--high { background: var(--debit); border-color: var(--debit); }
+
+.band-picker-note {
+  margin-top: 10px;
+  background: var(--white);
+  border-radius: 12px;
+  padding: 16px 18px;
+  box-shadow: var(--shadow-card);
+}
+
+.band-picker-note p {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--slate);
+  margin-bottom: 8px;
+}
+.band-picker-note p:last-child { margin-bottom: 0; }
+.band-picker-note strong { color: var(--ink); }
+
+/* ----------------------------------------------------------------
+   Phone shell — slightly taller for more content room
+   ---------------------------------------------------------------- */
+.phone-stage {
+  display: flex;
+  justify-content: center;
+}
+
+.phone {
+  width: 335px;
+  height: 680px;
+  background: #111827;
+  border-radius: 50px;
+  padding: 14px;
+  box-shadow:
+    0 40px 80px rgba(15,27,45,0.22),
+    0 0 0 1px rgba(255,255,255,0.06),
+    inset 0 0 0 1px rgba(255,255,255,0.04);
+  position: relative;
+}
+
+/* Dynamic island */
+.phone-island {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 110px;
+  height: 26px;
+  background: #111827;
+  border-radius: 0 0 18px 18px;
+  z-index: 2;
+}
+
+.phone-screen {
+  width: 100%;
+  height: 100%;
+  background: #F8F9FA;
+  border-radius: 38px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative; /* needed for modal overlay positioning */
+}
+
+/* ----------------------------------------------------------------
+   Shared phone screen scaffolding
+   ---------------------------------------------------------------- */
+.ps {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #F8F9FA;
+}
+
+/* App bar — GPay / PhonePe style */
+.ps-appbar {
+  display: flex;
+  align-items: center;
+  padding: 38px 16px 12px;
+  gap: 8px;
+  background: #F8F9FA;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+
+.ps-appbar-back {
+  font-size: 22px;
+  color: #1A1A2E;
+  background: none;
+  border: none;
+  cursor: pointer;
+  line-height: 1;
+  width: 28px;
+  padding: 0;
+  font-weight: 300;
+}
+
+.ps-appbar-title {
+  flex: 1;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1A1A2E;
+  text-align: center;
+  letter-spacing: -0.01em;
+}
+
+.ps-appbar-spacer { width: 28px; }
+
+/* ----------------------------------------------------------------
+   Screen 1 — Request
+   ---------------------------------------------------------------- */
+.ps--request {
+  background: #FFFFFF;
+}
+
+.ps-merchant {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 20px 0;
+}
+
+.ps-merchant-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #5B4FE9 0%, #8B5CF6 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.ps-merchant-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.ps-merchant-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1A1A2E;
+  line-height: 1.2;
+}
+
+.ps-merchant-handle {
+  font-size: 11px;
+  color: #8A8FA8;
+  margin-top: 2px;
+  font-family: var(--font-mono);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ps-verified-badge {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--credit-deep);
+  background: var(--credit-soft);
+  padding: 4px 9px;
+  border-radius: 100px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Direction pill — appears ABOVE the amount on the request screen */
+.ps-direction-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 20px 20px 0;
+  padding: 8px 14px;
+  border-radius: 100px;
+  font-size: 12.5px;
+  font-weight: 600;
+  width: fit-content;
+}
+
+.ps-direction-pill--out {
+  background: #FEF2F2;
+  color: #991B1B;
+}
+
+.ps-direction-pill-arrow {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* Amount block */
+.ps-amount-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 16px 20px 0;
+  gap: 4px;
+}
+
+.ps-amount-label-neutral {
+  font-size: 12px;
+  color: #8A8FA8;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.ps-amount-big {
+  font-family: var(--font-display);
+  font-size: 44px;
+  font-weight: 700;
+  color: #1A1A2E;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+/* Mismatch notice — inline, contained, not alarming */
+.ps-mismatch-notice {
+  margin: 14px 20px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #FFF7ED;
+  border: 1px solid #FBBF24;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 12.5px;
+  color: #92400E;
+}
+
+.ps-mismatch-icon {
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+/* Action group */
+.ps-action-group {
+  margin-top: auto;
+  padding: 0 20px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ps-accept {
+  background: #5B4FE9;
+  color: #fff;
+  border: none;
+  padding: 16px;
+  border-radius: 14px;
+  font-size: 15.5px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  transition: opacity 0.15s ease;
+}
+
+.ps-accept:active { opacity: 0.88; }
+
+.ps-decline {
+  background: transparent;
+  border: none;
+  padding: 12px;
+  font-size: 14px;
+  color: #8A8FA8;
+  font-weight: 500;
+}
+
+/* ----------------------------------------------------------------
+   Screen 2 — Clarify / Trust review
+   ---------------------------------------------------------------- */
+.ps--clarify {
+  background: #FFFFFF;
+  overflow-y: auto;
+  overflow-x: hidden;
+  /* Fill full phone height so content scrolls within the phone frame */
+  max-height: 100%;
+  flex: 1;
+}
+
+.ps-trust-badge {
+  margin: 16px 20px 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 100px;
+  font-size: 12.5px;
+  font-weight: 600;
+  align-self: flex-start;
+}
+
+.ps-trust-badge--check {
+  background: #FFF7ED;
+  color: #92400E;
+}
+
+.ps-trust-badge--review {
+  background: #FEF2F2;
+  color: #991B1B;
+}
+
+/* Direction block — THE dominant element */
+.ps-direction-block {
+  margin: 20px 20px 0;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: #F1F0FE;
+  border-radius: 16px;
+  padding: 18px 20px;
+}
+
+.ps-direction-arrow-large {
+  font-size: 52px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--debit);
+  flex-shrink: 0;
+}
+
+.ps-direction-label { min-width: 0; }
+
+.ps-direction-heading {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1A1A2E;
+  line-height: 1.2;
+}
+
+.ps-direction-to {
+  font-size: 12px;
+  color: #8A8FA8;
+  margin-top: 3px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Amount comparison card */
+.ps-amount-compare {
+  margin: 12px 20px 0;
+  background: #F8F9FA;
+  border-radius: 14px;
+  padding: 14px 16px;
+}
+
+.ps-amount-compare-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 0;
+}
+
+.ps-compare-label {
+  font-size: 12px;
+  color: #8A8FA8;
+}
+
+.ps-compare-value-small {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1A1A2E;
+  font-family: var(--font-mono);
+  text-decoration: line-through;
+  text-decoration-color: #CBD5E1;
+}
+
+.ps-amount-compare-divider {
+  height: 1px;
+  background: #E5E7EB;
+  margin: 8px 0;
+}
+
+.ps-compare-value-big {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--debit);
+  letter-spacing: -0.02em;
+}
+
+/* Trust signals */
+.ps-trust-signals {
+  margin: 12px 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ps-trust-signal {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #374151;
+}
+
+.ps-trust-signal-icon {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.ps-trust-signal-icon--warn {
+  background: #FEF3C7;
+  color: #92400E;
+}
+
+/* Verify merchant button */
+.ps-verify-btn {
+  margin: 12px 20px 0;
+  background: #F1F0FE;
+  border: 1px solid #C4B5FD;
+  color: #4338CA;
+  border-radius: 12px;
+  padding: 11px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.ps-verify-icon { font-size: 14px; }
+
+/* Why am I seeing this */
+.ps-why-btn {
+  margin: 10px 20px 0;
+  background: none;
+  border: none;
+  font-size: 12px;
+  color: #6366F1;
+  font-weight: 500;
+  padding: 4px 0;
+  text-align: left;
+}
+
+.ps-why-content {
+  margin: 6px 20px 0;
+  background: #EEF2FF;
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+
+.ps-why-content p {
+  font-size: 12px;
+  line-height: 1.6;
+  color: #3730A3;
+}
+
+/* Proceed button — trust-oriented, not panic-inducing */
+.ps-action-group--clarify { margin-top: 16px; padding-bottom: 4px; }
+
+.ps-proceed-trust {
+  background: #5B4FE9;
+  color: #fff;
+  border: none;
+  padding: 15px;
+  border-radius: 14px;
+  font-size: 14px;
+  font-weight: 600;
+  width: 100%;
+}
+
+/* ----------------------------------------------------------------
+   Screen 3 — Cooldown
+   Fixed: number is static, ring animates around it via SVG
+   ---------------------------------------------------------------- */
+.ps--cooldown {
+  background: #FFFFFF;
+}
+
+.ps-cooldown-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 28px 40px;
+  text-align: center;
+}
+
+.ps-cooldown-ring {
+  position: relative;
+  width: 96px;
+  height: 96px;
+  margin-bottom: 24px;
+}
+
+.ps-cooldown-svg {
+  width: 96px;
+  height: 96px;
+  transform: rotate(-90deg);
+}
+
+.ps-cooldown-track {
+  fill: none;
+  stroke: #F1F0FE;
+  stroke-width: 6;
+}
+
+.ps-cooldown-progress {
+  fill: none;
+  stroke: #5B4FE9;
+  stroke-width: 6;
+  stroke-linecap: round;
+  stroke-dasharray: 213.6;
+  transition: stroke-dashoffset 0.9s linear;
+}
+
+.ps-cooldown-num {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 700;
+  color: #1A1A2E;
+  line-height: 1;
+}
+
+.ps-cooldown-heading {
+  font-size: 17px;
+  font-weight: 700;
+  color: #1A1A2E;
+  margin-bottom: 10px;
+}
+
+.ps-cooldown-text {
+  font-size: 13px;
+  line-height: 1.65;
+  color: #6B7280;
+}
+
+/* ----------------------------------------------------------------
+   Screen 4 — Done
+   ---------------------------------------------------------------- */
+.ps--done {
+  background: #FFFFFF;
+}
+
+.ps-done-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 28px 40px;
+  text-align: center;
+}
+
+.ps-done-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  margin-bottom: 18px;
+}
+
+.ps-done-icon--ok {
+  background: #DCFCE7;
+  color: #166534;
+}
+
+.ps-done-icon--reviewed {
+  background: #EDE9FE;
+  color: #5B21B6;
+}
+
+.ps-done-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: #1A1A2E;
+  margin-bottom: 10px;
+  letter-spacing: -0.01em;
+}
+
+.ps-done-sub {
+  font-size: 13px;
+  line-height: 1.65;
+  color: #6B7280;
+  max-width: 240px;
+}
+
+.ps-replay {
+  margin-top: 28px;
+  background: #F1F0FE;
+  color: #4338CA;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* ----------------------------------------------------------------
+   Mobile breakpoints
+   ---------------------------------------------------------------- */
+@media (max-width: 900px) {
+  .screen-demo-grid {
+    grid-template-columns: 1fr;
+  }
+  .band-picker {
+    position: static;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .band-btn { flex: 1 1 calc(33% - 8px); min-width: 120px; }
+  .band-picker-note { width: 100%; order: 10; }
+  .phone-stage { padding: 8px 0; }
+}
+
+@media (max-width: 480px) {
+  .phone { width: 300px; height: 620px; border-radius: 44px; }
+  .phone-screen { border-radius: 32px; }
+  .ps-amount-big { font-size: 38px; }
+  .ps-compare-value-big { font-size: 22px; }
+  .ps-direction-arrow-large { font-size: 42px; }
+  .band-btn { flex: 1 1 100%; }
+}
+
+/* ----------------------------------------------------------------
+   Merchant Verification Modal
+   Overlays the phone screen — sits above all other phone content.
+   ---------------------------------------------------------------- */
+.ps-modal-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 12, 20, 0.55);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: flex-end;
+  z-index: 100;
+  border-radius: 38px;
+  overflow: hidden;
+}
+
+.ps-modal {
+  background: #FFFFFF;
+  width: 100%;
+  border-radius: 24px 24px 0 0;
+  padding: 0 0 28px;
+  max-height: 88%;
+  overflow-y: auto;
+}
+
+.ps-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 20px 14px;
+  border-bottom: 1px solid #F1F1F1;
+}
+
+.ps-modal-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1A1A2E;
+  letter-spacing: -0.01em;
+}
+
+.ps-modal-close {
+  background: #F1F0FE;
+  border: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: 12px;
+  color: #4338CA;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* Merchant identity row */
+.ps-modal-merchant {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px 12px;
+}
+
+.ps-modal-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #5B4FE9 0%, #8B5CF6 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.ps-modal-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1A1A2E;
+}
+
+.ps-modal-handle {
+  font-size: 11px;
+  color: #8A8FA8;
+  margin-top: 2px;
+  font-family: var(--font-mono);
+}
+
+/* Verification signals */
+.ps-modal-signals {
+  padding: 4px 20px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ps-modal-signal-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ps-modal-signal-dot {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.ps-modal-dot--ok {
+  background: #DCFCE7;
+  color: #166534;
+}
+
+.ps-modal-dot--warn {
+  background: #FEF3C7;
+  color: #92400E;
+}
+
+.ps-modal-signal-text {
+  font-size: 13px;
+  color: #374151;
+}
+
+/* Relationship row */
+.ps-modal-relationship {
+  margin: 4px 20px 16px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.ps-modal-rel--ok {
+  background: #F0FDF4;
+  color: #166534;
+  border: 1px solid #BBF7D0;
+}
+
+.ps-modal-rel--warn {
+  background: #FFFBEB;
+  color: #92400E;
+  border: 1px solid #FDE68A;
+}
+
+.ps-modal-rel-icon {
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+/* Verdict pills — two summary labels */
+.ps-modal-verdict {
+  display: flex;
+  gap: 8px;
+  padding: 0 20px 16px;
+  flex-wrap: wrap;
+}
+
+.ps-modal-verdict-pill {
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 100px;
+  white-space: nowrap;
+}
+
+.ps-verdict--ok {
+  background: #DCFCE7;
+  color: #166534;
+}
+
+.ps-verdict--warn {
+  background: #FEF3C7;
+  color: #92400E;
+}
+
+/* Dismiss button */
+.ps-modal-dismiss {
+  display: block;
+  width: calc(100% - 40px);
+  margin: 0 20px;
+  background: #5B4FE9;
+  color: #fff;
+  border: none;
+  padding: 14px;
+  border-radius: 12px;
+  font-size: 14.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ----------------------------------------------------------------
+   Phase 2 — NPCI Network Intelligence signals inside Why panel
+   ---------------------------------------------------------------- */
+
+/* Replace the old single <p> with a bullet list */
+.ps-why-bullets {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ps-why-bullet {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  font-size: 12px;
+  line-height: 1.55;
+  color: #3730A3;
+  position: relative;
+}
+
+.ps-why-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+
+.ps-why-dot--local {
+  background: #6366F1;
+}
+
+/* Network bullet: block layout inside styled card */
+.ps-why-bullet--network {
+  flex-direction: column;
+  align-items: flex-start;
+  background: #EEF2FF;
+  border: 1px solid #C7D2FE;
+  border-radius: 9px;
+  padding: 10px 12px;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.ps-why-dot--network {
+  background: #4F46E5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.18);
+  margin-top: 0;
+}
+
+.ps-why-network-text {
+  font-size: 12px;
+  line-height: 1.55;
+  color: #3730A3;
+  font-weight: 500;
+  width: 100%;
+}
+
+/* "NPCI network signal" label — clearly system-sourced, not alarming */
+
+/* Row inside network card: dot + text inline */
+.ps-why-network-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  width: 100%;
+}
+.ps-why-network-tag {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #4F46E5;
+  background: #E0E7FF;
+  padding: 3px 8px;
+  border-radius: 100px;
+  white-space: nowrap;
+  margin-top: 2px;
+}
